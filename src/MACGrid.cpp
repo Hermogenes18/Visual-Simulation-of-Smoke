@@ -28,6 +28,9 @@ Vec3 MACGrid::getVelocity(const Vec3 &pos)
     vel[2] = getVelocityZ(pos);
     return vel;
 }
+
+//OPERADORES
+
 double MACGrid::getVelocityX(const Vec3 &pos)
 {
     return u0.interp(pos - 0.5 * Vec3(0.0, VOXEL_SIZE, VOXEL_SIZE));
