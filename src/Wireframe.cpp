@@ -4,13 +4,11 @@
 #include "Wireframe.hpp"
 #include "constants.hpp"
 
-Wireframe::Wireframe()
-{
+Wireframe::Wireframe(){
     initialize();
 }
 
-Wireframe::~Wireframe()
-{
+Wireframe::~Wireframe(){
     glDeleteBuffers(1, &indexID);
     glDeleteBuffers(1, &vboID);
     glDeleteVertexArrays(1, &vaoID);
@@ -22,8 +20,7 @@ void Wireframe::update()
 {
 }
 
-void Wireframe::draw() const
-{
+void Wireframe::draw() const{
     // Draw the triangles !
     glDrawElements(
         GL_LINES,        // mode
@@ -33,29 +30,24 @@ void Wireframe::draw() const
     );
 }
 
-GLuint Wireframe::getProgramID() const
-{
+GLuint Wireframe::getProgramID() const{
     return programID;
 }
-GLuint Wireframe::getVaoID() const
-{
+GLuint Wireframe::getVaoID() const{
     return vaoID;
 }
-GLuint Wireframe::getMatrixID() const
-{
+GLuint Wireframe::getMatrixID() const{
     return MatrixID;
 }
 
 /* private */
 
-void Wireframe::initialize()
-{
+void Wireframe::initialize(){
     initVAO();
     initShaders();
 }
 
-void Wireframe::initVAO()
-{
+void Wireframe::initVAO(){
     /* domain cube */
     float vertices[8][3] = {
         {-1.0f, -1.0f, -1.0f},
@@ -70,8 +62,7 @@ void Wireframe::initVAO()
     const unsigned int indices[12][2] = {
         {0, 1}, {1, 6}, {6, 3}, {3, 0}, {0, 2}, {1, 4}, {6, 7}, {3, 5}, {2, 4}, {4, 7}, {7, 5}, {5, 2}};
 
-    for (int i = 0; i < 8; ++i)
-    {
+    for (int i = 0; i < 8; ++i){
         vertices[i][0] *= (float)ratio[0];
         vertices[i][1] *= (float)ratio[1];
         vertices[i][2] *= (float)ratio[2];
@@ -104,8 +95,7 @@ void Wireframe::initVAO()
     glBindVertexArray(0);
 }
 
-void Wireframe::initShaders()
-{
+void Wireframe::initShaders(){
     std::string vertex_shader_file = std::string("./src/shader/wireframe.vert");
     std::string fragment_shader_file = std::string("./src/shader/wireframe.frag");
 
@@ -119,15 +109,13 @@ void Wireframe::initShaders()
     // Read the Vertex Shader code from the file
     std::string vertexShaderCode;
     std::ifstream vertexShaderStream(vertex_shader_file, std::ios::in);
-    if (vertexShaderStream.is_open())
-    {
+    if (vertexShaderStream.is_open()){
         std::stringstream sstr;
         sstr << vertexShaderStream.rdbuf();
         vertexShaderCode = sstr.str();
         vertexShaderStream.close();
     }
-    else
-    {
+    else{
         printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vertex_shader_file.c_str());
         getchar();
         return;
@@ -136,15 +124,13 @@ void Wireframe::initShaders()
     // Read the Fragment Shader code from the file
     std::string fragmentShaderCode;
     std::ifstream fragmentShaderStream(fragment_shader_file, std::ios::in);
-    if (fragmentShaderStream.is_open())
-    {
+    if (fragmentShaderStream.is_open()){
         std::stringstream sstr;
         sstr << fragmentShaderStream.rdbuf();
         fragmentShaderCode = sstr.str();
         fragmentShaderStream.close();
     }
-    else
-    {
+    else{
         printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", fragment_shader_file.c_str());
         getchar();
         return;
@@ -211,8 +197,7 @@ void Wireframe::initShaders()
     MatrixID = glGetUniformLocation(programID, "MVP");
 }
 
-std::string Wireframe::ReadFile(const std::string &filename)
-{
+std::string Wireframe::ReadFile(const std::string &filename){
     std::ifstream ifs(filename);
     if (ifs.is_open())
         return nullptr;

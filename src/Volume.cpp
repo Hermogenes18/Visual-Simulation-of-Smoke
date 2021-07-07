@@ -4,13 +4,11 @@
 #include "Volume.hpp"
 #include "constants.hpp"
 
-Volume::Volume(std::shared_ptr<MACGrid> grids) : m_grids(grids)
-{
+Volume::Volume(std::shared_ptr<MACGrid> grids) : m_grids(grids){
     initialize();
 }
 
-Volume::~Volume()
-{
+Volume::~Volume(){
     glDeleteBuffers(1, &indexID);
     glDeleteBuffers(1, &vboID);
     glDeleteVertexArrays(1, &vaoID);
@@ -18,8 +16,7 @@ Volume::~Volume()
     glDeleteProgram(programID);
 }
 
-void Volume::update()
-{
+void Volume::update(){
     GLenum target = GL_TEXTURE_3D;
     GLenum filter = GL_LINEAR;
     GLenum address = GL_CLAMP_TO_BORDER;
@@ -62,8 +59,7 @@ void Volume::update()
     glBindTexture(target, 0);
 }
 
-void Volume::draw() const
-{
+void Volume::draw() const{
     glUniform1f(absorptionID, ABSORPTION);
     glUniform1f(numID, 2 * N);
     glUniform3f(ratioID, (float)ratio[0], (float)ratio[1], (float)ratio[2]);
@@ -85,41 +81,33 @@ void Volume::draw() const
 
 /* getID for Uniform */
 
-GLuint Volume::getProgramID() const
-{
+GLuint Volume::getProgramID() const{
     return programID;
 }
-GLuint Volume::getVaoID() const
-{
+GLuint Volume::getVaoID() const{
     return vaoID;
 }
-GLuint Volume::getCamPosID() const
-{
+GLuint Volume::getCamPosID() const{
     return cameraPosID;
 }
-GLuint Volume::getLightPosID() const
-{
+GLuint Volume::getLightPosID() const{
     return LightPosID;
 }
-GLuint Volume::getLightIntensityID() const
-{
+GLuint Volume::getLightIntensityID() const{
     return LightIntensityID;
 }
-GLuint Volume::getMatrixID() const
-{
+GLuint Volume::getMatrixID() const{
     return MatrixID;
 }
 
 /* private */
 
-void Volume::initialize()
-{
+void Volume::initialize(){
     initVAO();
     initShaders();
 }
 
-void Volume::initVAO()
-{
+void Volume::initVAO(){
     /* domain cube */
     const float vertices[8][3] = {
         {0.0f, 0.0f, 0.0f},
@@ -161,8 +149,7 @@ void Volume::initVAO()
     glBindVertexArray(0);
 }
 
-void Volume::initShaders()
-{
+void Volume::initShaders(){
     std::string vertex_shader_file = std::string("./src/shader/volume.vert");
     std::string fragment_shader_file = std::string("./src/shader/volume.frag");
 
@@ -175,15 +162,13 @@ void Volume::initShaders()
     // Read the Vertex Shader code from the file
     std::string vertexShaderCode;
     std::ifstream vertexShaderStream(vertex_shader_file, std::ios::in);
-    if (vertexShaderStream.is_open())
-    {
+    if (vertexShaderStream.is_open()){
         std::stringstream sstr;
         sstr << vertexShaderStream.rdbuf();
         vertexShaderCode = sstr.str();
         vertexShaderStream.close();
     }
-    else
-    {
+    else{
         printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vertex_shader_file.c_str());
         getchar();
         return;
@@ -192,15 +177,13 @@ void Volume::initShaders()
     // Read the Fragment Shader code from the file
     std::string fragmentShaderCode;
     std::ifstream fragmentShaderStream(fragment_shader_file, std::ios::in);
-    if (fragmentShaderStream.is_open())
-    {
+    if (fragmentShaderStream.is_open()){
         std::stringstream sstr;
         sstr << fragmentShaderStream.rdbuf();
         fragmentShaderCode = sstr.str();
         fragmentShaderStream.close();
     }
-    else
-    {
+    else{
         printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", fragment_shader_file.c_str());
         getchar();
         return;
@@ -218,8 +201,7 @@ void Volume::initShaders()
     // Check Vertex Shader
     glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &Result);
     glGetShaderiv(vertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-    if (InfoLogLength > 0)
-    {
+    if (InfoLogLength > 0){
         std::vector<char> vertexShaderErrorMessage(InfoLogLength + 1);
         glGetShaderInfoLog(vertexShaderID, InfoLogLength, NULL, &vertexShaderErrorMessage[0]);
         printf("%s\n", &vertexShaderErrorMessage[0]);
@@ -234,8 +216,7 @@ void Volume::initShaders()
     // Check Fragment Shader
     glGetShaderiv(fragmentShaderID, GL_COMPILE_STATUS, &Result);
     glGetShaderiv(fragmentShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-    if (InfoLogLength > 0)
-    {
+    if (InfoLogLength > 0){
         std::vector<char> fragmentShaderErrorMessage(InfoLogLength + 1);
         glGetShaderInfoLog(fragmentShaderID, InfoLogLength, NULL, &fragmentShaderErrorMessage[0]);
         printf("%s\n", &fragmentShaderErrorMessage[0]);
@@ -251,8 +232,7 @@ void Volume::initShaders()
     // Check the program
     glGetProgramiv(programID, GL_LINK_STATUS, &Result);
     glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-    if (InfoLogLength > 0)
-    {
+    if (InfoLogLength > 0){
         std::vector<char> programErrorMessage(InfoLogLength + 1);
         glGetProgramInfoLog(programID, InfoLogLength, NULL, &programErrorMessage[0]);
         printf("%s\n", &programErrorMessage[0]);
@@ -274,8 +254,7 @@ void Volume::initShaders()
     ratioID = glGetUniformLocation(programID, "ratio");
 }
 
-std::string Volume::ReadFile(const std::string &filename)
-{
+std::string Volume::ReadFile(const std::string &filename){
     std::ifstream ifs(filename);
     if (ifs.is_open())
         return nullptr;
