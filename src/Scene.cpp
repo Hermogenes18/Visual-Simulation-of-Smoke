@@ -6,8 +6,7 @@
 #include "Scene.hpp"
 #include "constants.hpp"
 
-Scene::Scene(std::shared_ptr<MACGrid> grids) : m_file_num(0), m_grids(grids)
-{
+Scene::Scene(std::shared_ptr<MACGrid> grids) : m_file_num(0), m_grids(grids){
     initialize();
 
     if (SAVE_MOVIE)
@@ -45,6 +44,7 @@ Scene::~Scene()
 {
 }
 
+//INICIACION
 void Scene::initialize()
 {
     m_camera = std::make_unique<Camera>();
@@ -52,6 +52,7 @@ void Scene::initialize()
     m_wireframe = std::make_unique<Wireframe>();
 }
 
+//UPDATE
 void Scene::update()
 {
     float r = 7.0f;
@@ -64,7 +65,7 @@ void Scene::update()
     m_volume->update();
     m_wireframe->update();
 }
-
+//RENDERIZADO
 void Scene::render()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
